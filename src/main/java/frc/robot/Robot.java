@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -116,7 +117,9 @@ public class Robot extends TimedRobot {
         var scheduler = CommandScheduler.getInstance();
         scheduler.schedule(m_bot.chassis.single_joystick_drive(m_bot.drive));
         scheduler.run();
-        scheduler.schedule(m_bot.shooter.shoot(m_bot.drive));
+        scheduler.schedule(new Shoot(m_bot.intake, m_bot.shooter, m_bot.drive));
+        scheduler.run();
+        scheduler.schedule(m_bot.intake.intake(m_bot.drive));
         scheduler.run();
         scheduler.schedule(m_bot.chassis.check_headless(m_bot.drive));
         scheduler.run();

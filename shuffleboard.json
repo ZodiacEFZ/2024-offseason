@@ -340,7 +340,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "7,4": {
+          "8,2": {
             "size": [
               1,
               1
@@ -349,6 +349,45 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Shooter-\u003eshooter: ",
               "_title": "Shooter-\u003eshooter: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake-\u003eintake: ",
+              "_title": "Intake-\u003eintake: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake-\u003erotate: ",
+              "_title": "Intake-\u003erotate: ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake-\u003eoutput: ",
+              "_title": "Intake-\u003eoutput: ",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -374,6 +413,6 @@
     "x": -7.199999809265137,
     "y": -7.199999809265137,
     "width": 1550.4000244140625,
-    "height": 830.4000244140625
+    "height": 878.4000244140625
   }
 }

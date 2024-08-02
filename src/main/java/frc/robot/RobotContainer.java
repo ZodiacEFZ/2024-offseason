@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.libzodiac.Zoystick;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -23,14 +24,10 @@ public class RobotContainer {
 
     public Chassis chassis = new Chassis();
 
-    public Shooter shooter = new Shooter(18, 30, true, false);
+    public Intake intake = new Intake(18, 36);
+    public Shooter shooter = new Shooter(30, false);
 
-    public Zoystick drive = new Zoystick(0)
-            .map(1, "A")
-            .map(2, "B")
-            .map(3, "X")
-            .map(4, "Y")
-            .set_filter(Zoystick.default_filter(0.08));
+    public Zoystick drive = new Zoystick(0).map(1, "A").map(2, "B").map(3, "X").map(4, "Y").set_filter(Zoystick.default_filter(0.08));
 //    public Zoystick ctrl = new Zoystick(1)
 //            .map(0, "X")
 //            .map(1, "Y")

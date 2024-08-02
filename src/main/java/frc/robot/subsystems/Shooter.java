@@ -11,21 +11,16 @@ import frc.libzodiac.Zoystick;
 public class Shooter extends SubsystemBase implements ZmartDash {
 
     public TalonFX shooter1;
-    public TalonFX shooter2;
 
-    public Shooter(int id1, int id2, boolean inverted1, boolean inverted2) {
+    public Shooter(int id1, boolean inverted1) {
         shooter1 = new TalonFX(id1);
-        shooter2 = new TalonFX(id2);
         shooter1.setInverted(inverted1);
-        shooter2.setInverted(inverted2);
     }
 
-    public ZCommand shoot(Zoystick zoystick) {
+    public ZCommand shoot(double speed) {
         return new ZLambda<>((x) -> {
-            var speed = zoystick.rTrigger();
             this.debug("shooter", speed);
             this.shooter1.set(speed);
-            this.shooter2.set(speed);
         }, this);
     }
 
