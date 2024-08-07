@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libzodiac.ZCommand;
-import frc.libzodiac.ZLambda;
+import frc.libzodiac.Zambda;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.Zoystick;
 import frc.libzodiac.hardware.Falcon;
@@ -23,13 +23,13 @@ public class Intake extends SubsystemBase implements ZmartDash {
     }
 
     public Intake output(double speed) {
-        this.debug("output",speed);
+        this.debug("output", speed);
         this.intakeMotor.go(-speed);
         return this;
     }
 
     public ZCommand intake(Zoystick zoystick) {
-        return new ZLambda<>((x) -> {
+        return new Zambda<>((x) -> {
             var trigger = zoystick.lTrigger();
             this.debug("rotate", rotateMotor.get());
             this.debug("intake", trigger > 0.3);

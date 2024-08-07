@@ -75,14 +75,8 @@ public class Chassis extends Zwerve {
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        super.periodic();
-    }
-
-    @Override
     protected Zwerve opt_init() {
-        super.gyro.zero_yaw = super.gyro.yaw();
+        super.gyro.reset("yaw");
         return this;
     }
 }

@@ -4,9 +4,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libzodiac.ZCommand;
-import frc.libzodiac.ZLambda;
+import frc.libzodiac.Zambda;
 import frc.libzodiac.ZmartDash;
-import frc.libzodiac.Zoystick;
 
 public class Shooter extends SubsystemBase implements ZmartDash {
 
@@ -18,7 +17,7 @@ public class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public ZCommand shoot(double speed) {
-        return new ZLambda<>((x) -> {
+        return new Zambda<>((x) -> {
             this.debug("shooter", speed);
             this.shooter1.set(speed);
         }, this);
