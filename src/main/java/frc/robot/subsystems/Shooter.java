@@ -1,26 +1,34 @@
 package frc.robot.subsystems;
 
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libzodiac.ZCommand;
-import frc.libzodiac.Zambda;
 import frc.libzodiac.ZmartDash;
+import frc.libzodiac.hardware.Falcon;
 
-public class Shooter extends SubsystemBase implements ZmartDash {
+public final class Shooter extends SubsystemBase implements ZmartDash {
 
-    public TalonFX shooter1;
+    private final Falcon left = new Falcon(30), right = new Falcon(31);
 
-    public Shooter(int id1, boolean inverted1) {
-        shooter1 = new TalonFX(id1);
-        shooter1.setInverted(inverted1);
+    public Shooter() {
     }
 
-    public ZCommand shoot(double speed) {
-        return new Zambda<>((x) -> {
-            this.debug("shooter", speed);
-            this.shooter1.set(speed);
-        }, this);
+    public Shooter init() {
+        this.left.init();
+        this.right.init();
+        return this;
+    }
+
+    public Shooter shoot(double speed) {
+        this.debug("speed", speed);
+        this.left.go(speed);
+        this.right.go(speed);
+        return this;
+    }
+
+    public Shooter stop() {
+        this.left.stop();
+        this.right.stop();
+        return this;
     }
 
     @Override

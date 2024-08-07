@@ -25,9 +25,8 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
 
     public Chassis chassis = new Chassis();
-
-    public Intake intake = new Intake(18, 36);
-    public Shooter shooter = new Shooter(30, false);
+    public Intake intake = new Intake();
+    public Shooter shooter = new Shooter();
 
     public Zoystick drive = new Zoystick(0)
             .map(1, "A")
@@ -35,7 +34,15 @@ public class RobotContainer {
             .map(3, "X")
             .map(4, "Y")
             .bind("X", new Zambda<>(Zwerve::toggle_headless, chassis))
+            .bind("A", new Zambda<>(Intake::drop, intake))
             .set_filter(Zoystick.default_filter(0.08));
+
+
+    public Zoystick ctrl = new Zoystick(1)
+            .map(1, "A")
+            .map(2, "B")
+            .map(3, "X")
+            .map(4, "Y");
 
 
     /**
@@ -49,6 +56,8 @@ public class RobotContainer {
     public RobotContainer init() {
         chassis.init();
         chassis.reset();
+        intake.init();
+        shooter.init();
         return this;
     }
 
@@ -67,7 +76,6 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-//        new CommandXboxController(0).x().toggleOnTrue(new ZLambda<Zwerve>(Zwerve::headless, this.chassis));
     }
 
 }

@@ -6,26 +6,29 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 
-public class Shoot extends ZCommand {
+public final class Shoot extends ZCommand {
 
     private final Intake intake;
     private final Shooter shooter;
-    private final Zoystick drive;
+    private final Zoystick ctrl;
 
-    public Shoot(Intake intake, Shooter shooter, Zoystick drive) {
+    public Shoot(Intake intake, Shooter shooter, Zoystick ctrl) {
         this.intake = this.require(intake);
         this.shooter = this.require(shooter);
-        this.drive = drive;
+        this.ctrl = ctrl;
     }
 
     @Override
     protected ZCommand exec() {
-        var speed = drive.rTrigger();
-        //shooter.shoot(speed);
-        if(speed>0)
-        {
-            intake.output(speed);
+        final var v = this.ctrl.rTrigger();
+        if (v < 0.001) {
+            this.shooter.stop();
+            this.intake.lift.go("standby");
+            return this;
         }
+        this.shooter.shoot(v);
+        this.intake.lift.go("up");
+        this.intake.convey.go("out");
         return this;
     }
 }

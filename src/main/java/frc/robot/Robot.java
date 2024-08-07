@@ -112,23 +112,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        // CommandScheduler.getInstance().schedule(RobotContainer.swerveDrive);
-        // CommandScheduler.getInstance().schedule(RobotContainer.sc);
-        var scheduler = CommandScheduler.getInstance();
+        final var scheduler = CommandScheduler.getInstance();
         scheduler.schedule(m_bot.chassis.drive(m_bot.drive));
         scheduler.run();
-        scheduler.schedule(new Shoot(m_bot.intake, m_bot.shooter, m_bot.drive));
+        scheduler.schedule(new Shoot(m_bot.intake, m_bot.shooter, m_bot.ctrl));
         scheduler.run();
-        scheduler.schedule(m_bot.intake.intake(m_bot.drive));
+        scheduler.schedule(m_bot.intake.intake_ctrl(m_bot.drive));
         scheduler.run();
         scheduler.schedule(m_bot.chassis.check_wheel_reset(m_bot.drive));
         scheduler.run();
-//        scheduler.schedule(m_bot.chassis_ctrl());
-//        scheduler.schedule(new RunCommand(() -> {
-//            m_bot.shooter1.set(0.1);
-//            m_bot.shooter2.set(0.1);
-//        }));
-//        scheduler.run();
     }
 
     @Override
