@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
         // if (RobotContainer.getTeleopIntakeCommand() != null)
         // RobotContainer.getTeleopIntakeCommand().schedule();
         m_bot.chassis.reset();
+        m_bot.intake.reset();
     }
 
     /**

@@ -7,27 +7,28 @@ import frc.libzodiac.hardware.Falcon;
 
 public final class Shooter extends SubsystemBase implements ZmartDash {
 
-    private final Falcon left = new Falcon(30), right = new Falcon(31);
+    private final Falcon down = new Falcon(21);
+    private final Falcon up = new Falcon(22);
 
     public Shooter() {
     }
 
     public Shooter init() {
-        this.left.init();
-        this.right.init();
+        this.down.set_pid(0, 0, 0).init();
+        this.up.set_pid(0, 0, 0).init();
         return this;
     }
 
     public Shooter shoot(double speed) {
         this.debug("speed", speed);
-        this.left.go(speed);
-        this.right.go(speed);
+        this.down.go(-speed);
+        this.up.go(speed);
         return this;
     }
 
     public Shooter stop() {
-        this.left.stop();
-        this.right.stop();
+        this.down.stop();
+        this.up.stop();
         return this;
     }
 

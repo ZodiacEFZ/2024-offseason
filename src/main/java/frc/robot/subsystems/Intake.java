@@ -5,30 +5,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libzodiac.*;
 import frc.libzodiac.hardware.Falcon;
 import frc.libzodiac.hardware.TalonSRXMotor;
+import frc.libzodiac.Constant;
 
 public class Intake extends SubsystemBase implements ZmartDash {
-    public final Falcon convey = new Falcon(18);
-    public final TalonSRXMotor.Servo lift = new TalonSRXMotor.Servo(36);
+    public final Falcon convey = new Falcon(31);
+    public final TalonSRXMotor.Servo lift = new TalonSRXMotor.Servo(32);
 
     public Intake() {
         this.convey.set_pid(0, 0, 0);
         this.convey.profile.put("in", 0.2);
         this.convey.profile.put("out", -0.2);
-        this.lift.set_pid(0.1, 0.1, 0.1);
+        this.lift.set_pid(0.01, 0.01, 0.01);
         this.lift.profile.put("down", 0.0);
-        this.lift.profile.put("up", 0.0);
-        this.lift.profile.put("standby", 0.0);
+        this.lift.profile.put("up", -300.0/Constant.TALONSRX_ENCODER_UNIT);
+        this.lift.profile.put("standby", -300.0/Constant.TALONSRX_ENCODER_UNIT);
     }
 
     public Intake init() {
         this.convey.init();
         this.lift.init();
-        return this;
-    }
-
-    public Intake output(double speed) {
-        this.debug("output", speed);
-        this.convey.go(-speed);
         return this;
     }
 
@@ -41,6 +36,11 @@ public class Intake extends SubsystemBase implements ZmartDash {
         this.lift.go("standby");
         return this;
     }
+
+    public Intake reset() {
+        this.lift.reset();
+        return this;
+    } 
 
     public ZCommand intake_ctrl(Zoystick ctrl) {
         return new Zambda<>((x) -> {
