@@ -53,9 +53,9 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods. This must be called from the
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
-//        var scheduler = CommandScheduler.getInstance();
-//        scheduler.schedule(m_bot.chassis.drive_forward());
-//        scheduler.run();
+        // var scheduler = CommandScheduler.getInstance();
+        // scheduler.schedule(m_bot.chassis.drive_forward());
+        // scheduler.run();
     }
 
     /**
@@ -77,11 +77,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         // m_autonomousCommand = RobotContainer.getAutoCommand();
-
         // // schedule the autonomous command (example)
         // if (m_autonomousCommand != null) {
         // m_autonomousCommand.schedule();
         // }
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
+        m_bot.chassis.clear();
     }
 
     /**
@@ -89,6 +91,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        var scheduler = CommandScheduler.getInstance();
+        scheduler.schedule(m_bot.chassis.drive_forward());
+        scheduler.run();
     }
 
     @Override
@@ -136,9 +141,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
-        var scheduler = CommandScheduler.getInstance();
-        scheduler.schedule(m_bot.chassis.drive_forward());
-        scheduler.run();
     }
 
     /**
