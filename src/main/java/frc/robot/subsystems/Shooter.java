@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.hardware.Falcon;
@@ -19,16 +18,29 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
         return this;
     }
 
-    public Shooter shoot(double speed) {
-        this.debug("speed", speed);
-        this.down.go(-speed);
-        this.up.go(speed);
+    private enum State {
+        Standby,
+        Shooting,
+    }
+
+    private State state = State.Standby;
+
+    public Shooter standby() {
+        if (this.state == State.Standby)
+            return this;
+        this.state = State.Standby;
+        this.up.shutdown();
+        this.down.shutdown();
         return this;
     }
 
-    public Shooter stop() {
-        this.down.stop();
-        this.up.stop();
+    public Shooter shoot() {
+        if (this.state == State.Shooting)
+            return this;
+        this.state = State.Shooting;
+        this.debug("shooting", true);
+        this.down.go(-1);
+        this.up.go(1);
         return this;
     }
 
@@ -37,4 +49,3 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
         return "Shooter";
     }
 }
-

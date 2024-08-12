@@ -37,13 +37,11 @@ public class RobotContainer {
             .bind("A", new Zambda<>(Intake::drop, intake))
             .set_filter(Zoystick.default_filter(0.08));
 
-
     public Zoystick ctrl = new Zoystick(1)
             .map(1, "A")
             .map(2, "B")
             .map(3, "X")
             .map(4, "Y");
-
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,6 +74,13 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
+        final var ctrl = new CommandXboxController(0);
+        ctrl.leftTrigger().toggleOnTrue(new Zambda<>(Intake::take, this.intake));
+        ctrl.leftTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
+        ctrl.rightTrigger().toggleOnTrue(new Zambda<>(Shooter::shoot, this.shooter));
+        ctrl.rightTrigger().toggleOnTrue(new Zambda<>(Intake::send, this.intake));
+        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
+        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Shooter::standby, this.shooter));
     }
 
 }

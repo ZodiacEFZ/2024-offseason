@@ -1,15 +1,14 @@
 package frc.robot.subsystems;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.libzodiac.*;
 import frc.libzodiac.hardware.Falcon;
-import frc.libzodiac.hardware.TalonSRXMotor;
+import frc.libzodiac.hardware.Pro775;
 import frc.libzodiac.Constant;
+import frc.libzodiac.ZmartDash;
 
-public class Intake extends SubsystemBase implements ZmartDash {
+public final class Intake extends SubsystemBase implements ZmartDash {
     public final Falcon convey = new Falcon(31);
-    public final TalonSRXMotor.Servo lift = new TalonSRXMotor.Servo(32);
+    public final Pro775.Servo lift = new Pro775.Servo(32);
 
     public Intake() {
         this.convey.set_pid(0, 0, 0);
@@ -17,8 +16,8 @@ public class Intake extends SubsystemBase implements ZmartDash {
         this.convey.profile.put("out", -0.2);
         this.lift.set_pid(0.01, 0.01, 0.01);
         this.lift.profile.put("down", 0.0);
-        this.lift.profile.put("up", -300.0/Constant.TALONSRX_ENCODER_UNIT);
-        this.lift.profile.put("standby", -300.0/Constant.TALONSRX_ENCODER_UNIT);
+        this.lift.profile.put("up", -300.0 / Constant.TALONSRX_ENCODER_UNIT);
+        this.lift.profile.put("standby", -300.0 / Constant.TALONSRX_ENCODER_UNIT);
     }
 
     public Intake init() {
@@ -27,34 +26,59 @@ public class Intake extends SubsystemBase implements ZmartDash {
         return this;
     }
 
-    public Intake drop() {
-        this.lift.go("down");
-        Util.blocking_wait(500);
-        this.convey.go("out");
-        Util.blocking_wait(1000);
-        this.convey.stop();
-        this.lift.go("standby");
-        return this;
+    private enum State {
+        Standby,
+        Taking,
+        Sending,
+        Dropping,
     }
+
+    private State state = State.Standby;
 
     public Intake reset() {
         this.lift.reset();
         return this;
-    } 
+    }
 
-    public ZCommand intake_ctrl(Zoystick ctrl) {
-        return new Zambda<>((x) -> {
-            final var trigger = ctrl.lTrigger();
-            this.debug("rotate", x.lift.get());
-            this.debug("intake", trigger > 0.3);
-            if (trigger > 0.3) {
-                x.lift.go("down");
-                x.convey.go("in");
-            } else {
-                x.lift.go("standby");
-                x.convey.stop();
-            }
-        }, this);
+    public Intake standby() {
+        if (this.state == State.Standby)
+            return this;
+        this.state = State.Standby;
+        this.lift.go(-200);
+        this.convey.shutdown();
+        return this;
+    }
+
+    public Intake take() {
+        if (this.state == State.Taking)
+            return this;
+        this.state = State.Taking;
+        this.lift.go(0);
+        this.convey.go(-1);
+        return this;
+    }
+
+    public Intake send() {
+        if (this.state == State.Sending)
+            return this;
+        this.state = State.Sending;
+        this.lift.go(-500);
+        this.convey.go(1);
+        return this;
+    }
+
+    public Intake drop() {
+        if (this.state == State.Dropping)
+            return this;
+        this.state = State.Dropping;
+        this.lift.go(0);
+        this.convey.go(1);
+        return this;
+    }
+
+    @Override
+    public void periodic() {
+        return;
     }
 
     @Override
@@ -62,4 +86,3 @@ public class Intake extends SubsystemBase implements ZmartDash {
         return "Intake";
     }
 }
-

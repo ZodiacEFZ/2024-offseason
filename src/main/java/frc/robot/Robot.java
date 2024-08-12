@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -120,10 +119,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         final var scheduler = CommandScheduler.getInstance();
         scheduler.schedule(m_bot.chassis.drive(m_bot.drive));
-        scheduler.run();
-        scheduler.schedule(new Shoot(m_bot.intake, m_bot.shooter, m_bot.ctrl));
-        scheduler.run();
-        scheduler.schedule(m_bot.intake.intake_ctrl(m_bot.drive));
         scheduler.run();
         scheduler.schedule(m_bot.chassis.check_wheel_reset(m_bot.drive));
         scheduler.run();
