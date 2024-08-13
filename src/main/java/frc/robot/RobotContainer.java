@@ -74,14 +74,15 @@ public class RobotContainer {
      */
     private void configureBindings() {
         final var ctrl = new CommandXboxController(0);
-        ctrl.a().toggleOnTrue(new Zambda<>(Intake::drop, this.intake));
-        ctrl.a().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
-        ctrl.leftTrigger().toggleOnTrue(new Zambda<>(Intake::take, this.intake));
-        ctrl.leftTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
-        ctrl.rightTrigger().toggleOnTrue(new Zambda<>(Shooter::shoot, this.shooter));
-        ctrl.rightTrigger().toggleOnTrue(new Zambda<>(Intake::send, this.intake));
-        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
-        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Shooter::standby, this.shooter));
+//        ctrl.a().onTrue(new Zambda<>(Intake::drop, this.intake));
+//        ctrl.a().onFalse(new Zambda<>(Intake::standby, this.intake));
+        // todo :change the key
+        ctrl.leftTrigger().onTrue(new Zambda<>(Intake::take, this.intake));
+        ctrl.leftTrigger().onFalse(new Zambda<>(Intake::standby, this.intake));
+        ctrl.rightTrigger().onTrue(new Zambda<>(Shooter::shoot, this.shooter));
+        ctrl.rightTrigger().onTrue(new Zambda<>(Intake::send, this.intake));
+        ctrl.rightTrigger().onFalse(new Zambda<>(Intake::standby, this.intake));
+        ctrl.rightTrigger().onFalse(new Zambda<>(Shooter::standby, this.shooter));
     }
 
 }

@@ -31,6 +31,8 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_bot = new RobotContainer().init();
+        //m_bot.chassis.clear();
+        m_bot.intake.lift.reset();
     }
 
     /**
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
         // }
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-        m_bot.chassis.clear();
+        //m_bot.chassis.clear();
     }
 
     /**
@@ -109,6 +111,7 @@ public class Robot extends TimedRobot {
         // if (RobotContainer.getTeleopIntakeCommand() != null)
         // RobotContainer.getTeleopIntakeCommand().schedule();
         m_bot.chassis.reset();
+        m_bot.intake.lift.reset();
     }
 
     /**
@@ -117,9 +120,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         final var scheduler = CommandScheduler.getInstance();
-        // scheduler.schedule(m_bot.chassis.drive(m_bot.drive));
-        // scheduler.run();
-        // scheduler.schedule(m_bot.chassis.check_wheel_reset(m_bot.drive));
+        scheduler.schedule(m_bot.chassis.drive(m_bot.drive));
+        scheduler.run();
+        scheduler.schedule(m_bot.chassis.check_wheel_reset(m_bot.drive));
         scheduler.run();
     }
 
@@ -128,6 +131,7 @@ public class Robot extends TimedRobot {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
         m_bot.chassis.clear();
+        m_bot.chassis.reset();
     }
 
     /**
