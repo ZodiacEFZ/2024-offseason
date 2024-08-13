@@ -34,7 +34,6 @@ public class RobotContainer {
             .map(3, "X")
             .map(4, "Y")
             .bind("X", new Zambda<>(Zwerve::toggle_headless, chassis))
-            .bind("A", new Zambda<>(Intake::drop, intake))
             .set_filter(Zoystick.default_filter(0.08));
 
     public Zoystick ctrl = new Zoystick(1)
@@ -75,6 +74,8 @@ public class RobotContainer {
      */
     private void configureBindings() {
         final var ctrl = new CommandXboxController(0);
+        ctrl.a().toggleOnTrue(new Zambda<>(Intake::drop, this.intake));
+        ctrl.a().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
         ctrl.leftTrigger().toggleOnTrue(new Zambda<>(Intake::take, this.intake));
         ctrl.leftTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
         ctrl.rightTrigger().toggleOnTrue(new Zambda<>(Shooter::shoot, this.shooter));
