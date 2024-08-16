@@ -34,10 +34,10 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
         // return this;
         this.state = State.Shooting;
         this.debug("state", "shooting");
-        this.down.set(-0.8);
-        this.up.set(0.8);
-        //this.down.go(-100);
-        //this.up.go(100);
+        // this.down.set(-0.8);
+        // this.up.set(0.8);
+        this.down.go(-100);
+        this.up.go(100);
         return this;
     }
 

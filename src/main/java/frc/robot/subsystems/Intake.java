@@ -9,7 +9,7 @@ import frc.libzodiac.hardware.Pro775;
 
 public final class Intake extends SubsystemBase implements ZmartDash {
     public final ZMotor convey = new Falcon(31);
-    public final Pro775.Servo lift = new Pro775.Servo(32);
+    public final Pro775.Servo lift = new Pro775.Servo(38);
     private final DigitalInput toplimitSwitch = new DigitalInput(0);
     private final DigitalInput bottomlimitSwitch = new DigitalInput(1);
     private State state = State.Standby;
@@ -18,10 +18,10 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         this.convey.set_pid(0.01, 0, 0);
         this.convey.profile.put("in", -20.0);
         this.convey.profile.put("out", 20.0);
-        this.lift.set_pid(0.5, 5e-5, 0.01);
-        this.lift.profile.put("down", 4000.0);
+        this.lift.set_pid(0.5, 5e-5, 50);
+        this.lift.profile.put("down", 3850.0);
         this.lift.profile.put("up", 0.0);
-        this.lift.profile.put("standby", 1500.0);
+        this.lift.profile.put("standby", 3900.0);
     }
 
     public Intake init() {
@@ -34,7 +34,8 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         // if (this.state == State.Standby)
         // return this;
         this.state = State.Standby;
-        if ((this.lift.get() < this.lift.profile.get("standby") & this.bottomlimitSwitch.get()) || (this.lift.get() > this.lift.profile.get("standby") & this.toplimitSwitch.get())) {
+        if ((this.lift.get() < this.lift.profile.get("standby") & this.bottomlimitSwitch.get())
+                || (this.lift.get() > this.lift.profile.get("standby") & this.toplimitSwitch.get())) {
             this.lift.go("standby");
         }
         this.convey.shutdown();
@@ -47,7 +48,10 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         // return this;
         this.state = State.Taking;
         if (this.bottomlimitSwitch.get()) {
-            this.lift.go("down");
+            if (this.lift.get() < 5000)
+                this.lift.go("down");
+            else
+                this.lift.shutdown();
         }
         this.convey.go("in");
         this.debug("state", "taking");
@@ -58,14 +62,21 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         // if (this.state == State.Sending)
         // return this;
         this.state = State.Sending;
-        if (this.toplimitSwitch.get()) {
-            this.lift.go("up");
-        }
-        if (!this.toplimitSwitch.get()) {
+        // if (this.toplimitSwitch.get()) {
+        // this.lift.go("up");
+        // }
+        // if (!this.toplimitSwitch.get()) {
+        // this.convey.go("out");
+        // } else {
+        // this.convey.shutdown();
+        // }
+        if (this.lift.get() < 100)
             this.convey.go("out");
-        } else {
-            this.convey.shutdown();
-        }
+        this.debug("pos", this.lift.get());
+        // if (this.lift.get() < 2000)
+        // this.lift.shutdown();
+        // else
+        this.lift.go("up");
         this.debug("state", "sending");
         return this;
     }
