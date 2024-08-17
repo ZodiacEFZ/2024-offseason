@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         final var scheduler = CommandScheduler.getInstance();
-        m_bot.chassis.debug("rx", m_bot.xbox.rx().inverted().threshold(.1).get());
+        m_bot.chassis.debug("rx", m_bot.driver.rx().inverted().threshold(.1).get());
         scheduler.schedule(m_bot.drive);
         scheduler.run();
     }
