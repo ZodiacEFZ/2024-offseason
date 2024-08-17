@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_bot = new RobotContainer().init();
-        //m_bot.chassis.clear();
-        // m_bot.intake.lift.reset();
+        //todo
+//        m_bot.intake.lift.reset();
     }
 
     /**
@@ -54,9 +54,6 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods. This must be called from the
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
-        // var scheduler = CommandScheduler.getInstance();
-        // scheduler.schedule(m_bot.chassis.drive_forward());
-        // scheduler.run();
     }
 
     /**
@@ -82,9 +79,7 @@ public class Robot extends TimedRobot {
         // if (m_autonomousCommand != null) {
         // m_autonomousCommand.schedule();
         // }
-        // Cancels all running commands at the start of test mode.
-        CommandScheduler.getInstance().cancelAll();
-        //m_bot.chassis.clear();
+        //todo
     }
 
     /**
@@ -93,7 +88,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         var scheduler = CommandScheduler.getInstance();
-        scheduler.schedule(m_bot.chassis.drive_forward());
+//        scheduler.schedule(m_bot.chassis.drive_forward()); //todo
         scheduler.run();
     }
 
@@ -110,8 +105,7 @@ public class Robot extends TimedRobot {
         // RobotContainer.getTeleopShooterCommand().schedule();
         // if (RobotContainer.getTeleopIntakeCommand() != null)
         // RobotContainer.getTeleopIntakeCommand().schedule();
-        m_bot.chassis.reset();
-        // m_bot.intake.lift.reset();
+        CommandScheduler.getInstance().cancelAll();
     }
 
     /**
@@ -120,9 +114,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         final var scheduler = CommandScheduler.getInstance();
-        // scheduler.schedule(m_bot.chassis.drive(m_bot.drive));
-        // scheduler.run();
-        // scheduler.schedule(m_bot.chassis.check_wheel_reset(m_bot.drive));
+        m_bot.chassis.debug("rx", m_bot.xbox.rx().inverted().threshold(.1).get());
+        scheduler.schedule(m_bot.drive);
         scheduler.run();
     }
 
@@ -130,8 +123,6 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-        m_bot.chassis.clear();
-        m_bot.chassis.reset();
     }
 
     /**
@@ -139,6 +130,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+        CommandScheduler.getInstance().run();
     }
 
     /**

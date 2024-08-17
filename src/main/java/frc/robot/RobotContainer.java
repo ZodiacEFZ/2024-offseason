@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.libzodiac.Zambda;
 import frc.libzodiac.Zamera;
-import frc.libzodiac.Zoystick;
-import frc.libzodiac.Zwerve;
+import frc.libzodiac.ui.Axis;
+import frc.libzodiac.ui.Xbox;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -28,63 +27,35 @@ public class RobotContainer {
     public Chassis chassis = new Chassis();
     public Intake intake = new Intake();
     public Shooter shooter = new Shooter();
-    public Zamera camera = new Zamera().start();
+    public Zamera camera = new Zamera();
+    public Xbox xbox = new Xbox(0); //todo
+    public Xbox controller = new Xbox(1);
 
-    public Zoystick drive = new Zoystick(0)
-            .map(1, "A")
-            .map(2, "B")
-            .map(3, "X")
-            .map(4, "Y")
-            .bind("X", new Zambda<>(Zwerve::toggle_headless, chassis))
-            .set_filter(Zoystick.default_filter(0.08));
-
-    public Zoystick ctrl = new Zoystick(1)
-            .map(1, "A")
-            .map(2, "B")
-            .map(3, "X")
-            .map(4, "Y");
+    public Command drive = chassis.drive(
+            xbox.ly().inverted().map(Axis.QUAD_FILTER).threshold(.1),
+            xbox.lx().inverted().map(Axis.QUAD_FILTER).threshold(.1),
+            xbox.rx().inverted().threshold(.1)
+    );
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        // Configure the trigger bindings
-        configureBindings();
+        this.xbox.x().on_press(new Zambda(this.chassis, () -> this.chassis.mod_reset()));
+
+        this.controller.lb().on_down(new Zambda(this.intake, () -> this.intake.take()))
+                .on_release(new Zambda(this.intake, () -> this.intake.standby()));
+        this.controller.rb().on_down(new Zambda(this.shooter, () -> this.shooter.shoot()))
+                .on_down(new Zambda(this.intake, () -> this.intake.send()))
+                .on_release(new Zambda(this.intake, () -> this.intake.standby()))
+                .on_release(new Zambda(this.shooter, () -> this.shooter.standby()));
     }
 
     public RobotContainer init() {
         chassis.init();
-        chassis.reset();
         intake.init();
         shooter.init();
+        camera.start();
         return this;
     }
-
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-     * {@link
-     * CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings() {
-        final var ctrl = new CommandXboxController(0);
-        // ctrl.a().onTrue(new Zambda<>(Intake::drop, this.intake));
-        // ctrl.a().onFalse(new Zambda<>(Intake::standby, this.intake));
-        // todo :change the key
-        ctrl.leftTrigger().onTrue(new Zambda<>(Intake::take, this.intake));
-        ctrl.leftTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
-        ctrl.rightTrigger().onTrue(new Zambda<>(Shooter::shoot, this.shooter));
-        ctrl.rightTrigger().onTrue(new Zambda<>(Intake::send, this.intake));
-        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Intake::standby, this.intake));
-        ctrl.rightTrigger().toggleOnFalse(new Zambda<>(Shooter::standby, this.shooter));
-    }
-
 }

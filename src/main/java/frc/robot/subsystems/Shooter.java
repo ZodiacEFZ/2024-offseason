@@ -8,10 +8,6 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
 
     private final Falcon down = new Falcon(21);
     private final Falcon up = new Falcon(22);
-    private State state = State.Standby;
-
-    public Shooter() {
-    }
 
     public Shooter init() {
         this.down.set_pid(0.01, 0, 0).init();
@@ -20,9 +16,6 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public Shooter standby() {
-        // if (this.state == State.Standby)
-        // return this;
-        this.state = State.Standby;
         this.debug("state", "standby");
         this.up.shutdown();
         this.down.shutdown();
@@ -30,12 +23,7 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public Shooter shoot() {
-        // if (this.state == State.Shooting)
-        // return this;
-        this.state = State.Shooting;
         this.debug("state", "shooting");
-        // this.down.set(-0.8);
-        // this.up.set(0.8);
         this.down.go(-100);
         this.up.go(100);
         return this;
@@ -44,10 +32,5 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     @Override
     public String key() {
         return "Shooter";
-    }
-
-    private enum State {
-        Standby,
-        Shooting,
     }
 }
