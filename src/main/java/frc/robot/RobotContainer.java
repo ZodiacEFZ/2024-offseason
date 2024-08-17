@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.libzodiac.Zambda;
+import frc.libzodiac.Zamera;
 import frc.libzodiac.Zoystick;
 import frc.libzodiac.Zwerve;
 import frc.robot.subsystems.Chassis;
@@ -27,6 +28,7 @@ public class RobotContainer {
     public Chassis chassis = new Chassis();
     public Intake intake = new Intake();
     public Shooter shooter = new Shooter();
+    public Zamera camera = new Zamera().start();
 
     public Zoystick drive = new Zoystick(0)
             .map(1, "A")
