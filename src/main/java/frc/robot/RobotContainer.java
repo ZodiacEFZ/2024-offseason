@@ -32,8 +32,8 @@ public class RobotContainer {
     public Xbox controller = new Xbox(1);
 
     public Command drive = chassis.drive(
-            xbox.ly().inverted().map(Axis.QUAD_FILTER).threshold(.1),
-            xbox.lx().inverted().map(Axis.QUAD_FILTER).threshold(.1),
+            xbox.ly().inverted().map(Axis.ATAN_FILTER).threshold(.1),
+            xbox.lx().inverted().map(Axis.ATAN_FILTER).threshold(.1),
             xbox.rx().inverted().threshold(.1)
     );
 
