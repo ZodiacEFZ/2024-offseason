@@ -53,7 +53,7 @@ public final class Intake extends SubsystemBase implements ZmartDash {
             else
                 this.lift.shutdown();
         }
-        this.convey.go("in");
+        this.convey.raw(0.2);
         this.debug("state", "taking");
         return this;
     }
@@ -71,7 +71,7 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         // this.convey.shutdown();
         // }
         if (this.lift.get() < 100)
-            this.convey.go("out");
+            this.convey.raw(0.2);
         this.debug("pos", this.lift.get());
         // if (this.lift.get() < 2000)
         // this.lift.shutdown();
