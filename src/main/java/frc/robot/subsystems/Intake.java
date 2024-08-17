@@ -17,7 +17,8 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         this.lift.set_pid(0.5, 5e-5, 50);
         this.lift.profile.put("down", 3850.0);
         this.lift.profile.put("up", 0.0);
-        this.lift.profile.put("standby", 1900.0); //todo
+        this.lift.profile.put("standby", 1900.0); // todo
+        this.convey.set_pid(0, 0, 0);
     }
 
     public Intake init() {
