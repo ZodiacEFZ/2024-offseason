@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libzodiac.Util;
 import frc.libzodiac.ZMotor;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.hardware.Falcon;
@@ -34,6 +35,18 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         }
         this.convey.shutdown();
         this.debug("state", "standby");
+        return this;
+    }
+
+    public Intake amp() {
+        if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get())
+                || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
+            this.lift.go("standby");
+        }
+        this.debug("state", "amp");
+        if (Util.approx(this.lift.get(), this.lift.profile.get("standby"), 100)) {
+            this.convey.raw(0.3);
+        }
         return this;
     }
 
