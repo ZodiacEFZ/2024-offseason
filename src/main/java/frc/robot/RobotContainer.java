@@ -41,15 +41,15 @@ public class RobotContainer {
      */
     public RobotContainer() {
         this.driver.a().on_press(new Zambda(this.chassis, () -> this.chassis.toggle_headless()));
-
+        this.driver.b().on_down(new Zambda(this.chassis, () -> this.chassis.reset_headless()));
         this.driver.x().on_press(new Zambda(this.chassis, () -> this.chassis.mod_reset()));
 
-         this.controller.lt().into().on_down(new Zambda(this.intake, () -> this.intake.take()))
-                 .on_release(new Zambda(this.intake, () -> this.intake.standby()));
-         this.controller.rt().into().on_down(new Zambda(this.shooter, () -> this.shooter.shoot()))
-                 .on_down(new Zambda(this.intake, () -> this.intake.send()))
-                 .on_release(new Zambda(this.intake, () -> this.intake.standby()))
-                 .on_release(new Zambda(this.shooter, () -> this.shooter.standby()));
+        this.controller.lt().into().on_down(new Zambda(this.intake, () -> this.intake.take()))
+                .on_release(new Zambda(this.intake, () -> this.intake.standby()));
+        this.controller.rt().into().on_down(new Zambda(this.shooter, () -> this.shooter.shoot()))
+                .on_down(new Zambda(this.intake, () -> this.intake.send()))
+                .on_release(new Zambda(this.intake, () -> this.intake.standby()))
+                .on_release(new Zambda(this.shooter, () -> this.shooter.standby()));
     }
 
     public RobotContainer init() {

@@ -72,4 +72,8 @@ public class Chassis extends Zwerve {
         encoder[3].set_zero(1853);
         return this;
     }
+
+    public void reset_headless() {
+        this.gyro.reset();
+    }
 }
