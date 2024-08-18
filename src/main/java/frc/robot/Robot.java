@@ -31,8 +31,6 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_bot = new RobotContainer().init();
-        //todo
-//        m_bot.intake.lift.reset();
     }
 
     /**
