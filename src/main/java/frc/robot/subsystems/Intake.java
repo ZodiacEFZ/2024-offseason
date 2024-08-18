@@ -50,6 +50,11 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         return this;
     }
 
+    public Intake amp(boolean __) {
+        this.convey.shutdown();
+        return this;
+    }
+
     public Intake take() {
         if (this.bottomLimitSwitch.get())
             this.lift.go("down");

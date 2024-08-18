@@ -44,7 +44,9 @@ public class RobotContainer {
         this.driver.b().on_press(new Zambda(this.chassis, () -> this.chassis.reset_headless()));
         this.driver.x().on_press(new Zambda(this.chassis, () -> this.chassis.mod_reset()));
 
-        this.controller.a().on_down(new Zambda(this.intake, () -> this.intake.amp()));
+        this.controller.a().on_down(new Zambda(this.intake, () -> this.intake.amp()))
+                .on_release(new Zambda(this.intake, () -> this.intake.amp(false)));
+        this.controller.lb().on_press(new Zambda(this.intake, () -> this.intake.lift.reset()));
         this.controller.lt().into().on_down(new Zambda(this.intake, () -> this.intake.take()))
                 .on_release(new Zambda(this.intake, () -> this.intake.standby()));
         this.controller.rt().into().on_down(new Zambda(this.shooter, () -> this.shooter.shoot()))

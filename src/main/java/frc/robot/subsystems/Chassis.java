@@ -9,7 +9,6 @@ import frc.libzodiac.util.PIDProfile;
 import frc.libzodiac.util.Vec2D;
 
 public class Chassis extends Zwerve {
-
     public static final Falcon[] speed = {
             new Falcon(5),
             new Falcon(6).invert(),
@@ -45,7 +44,7 @@ public class Chassis extends Zwerve {
      */
     public Chassis() {
         super(mods, gyro, new Vec2D(114, 114));
-        super.output = 200;
+        super.output = 300;
         final var v = new PIDProfile(0.1, 5, 0);
         final var a = new PIDProfile(0.3, 0, 0);
         // Mod I.
@@ -65,7 +64,6 @@ public class Chassis extends Zwerve {
     @Override
     protected Zwerve opt_init() {
         gyro.init();
-        gyro.reset("yaw");
         encoder[0].set_zero(3607); //todo
         encoder[1].set_zero(480);
         encoder[2].set_zero(192);
@@ -74,6 +72,6 @@ public class Chassis extends Zwerve {
     }
 
     public void reset_headless() {
-        this.gyro.reset();
+        super.headless_zero = gyro.get("yaw");
     }
 }
