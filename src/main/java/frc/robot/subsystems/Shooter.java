@@ -5,7 +5,6 @@ import frc.libzodiac.ZmartDash;
 import frc.libzodiac.hardware.Falcon;
 
 public final class Shooter extends SubsystemBase implements ZmartDash {
-
     private final Falcon rd = new Falcon(21);
     private final Falcon ru = new Falcon(22);
     private final Falcon ld = new Falcon(23);

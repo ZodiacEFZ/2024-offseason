@@ -23,15 +23,14 @@ import frc.robot.subsystems.Shooter;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+    public final Chassis chassis = new Chassis();
+    public final Intake intake = new Intake();
+    public final Shooter shooter = new Shooter();
+    public final Zamera camera = new Zamera();
+    public final Xbox driver = new Xbox(0);
+    public final Xbox controller = new Xbox(1);
 
-    public Chassis chassis = new Chassis();
-    public Intake intake = new Intake();
-    public Shooter shooter = new Shooter();
-    public Zamera camera = new Zamera();
-    public Xbox driver = new Xbox(0);
-    public Xbox controller = new Xbox(1);
-
-    public Command drive = chassis.drive(
+    public final Command drive = chassis.drive(
             driver.ly().inverted().map(Axis.ATAN_FILTER).threshold(.1),
             driver.lx().inverted().map(Axis.ATAN_FILTER).threshold(.1),
             driver.rx().inverted().threshold(.1));
@@ -40,19 +39,19 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        this.driver.a().on_press(new Zambda(this.chassis, () -> this.chassis.toggle_headless()));
-        this.driver.b().on_press(new Zambda(this.chassis, () -> this.chassis.reset_headless()));
-        this.driver.x().on_press(new Zambda(this.chassis, () -> this.chassis.mod_reset()));
+        this.driver.a().on_press(new Zambda(this.chassis, this.chassis::toggle_headless));
+        this.driver.b().on_press(new Zambda(this.chassis, this.chassis::reset_headless));
+        this.driver.x().on_press(new Zambda(this.chassis, this.chassis::mod_reset));
 
-        this.controller.a().on_down(new Zambda(this.intake, () -> this.intake.amp()))
+        this.controller.a().on_down(new Zambda(this.intake, this.intake::amp))
                 .on_release(new Zambda(this.intake, () -> this.intake.amp(false)));
-        this.controller.lb().on_press(new Zambda(this.intake, () -> this.intake.lift.reset()));
-        this.controller.lt().into().on_down(new Zambda(this.intake, () -> this.intake.take()))
-                .on_release(new Zambda(this.intake, () -> this.intake.standby()));
-        this.controller.rt().into().on_down(new Zambda(this.shooter, () -> this.shooter.shoot()))
-                .on_down(new Zambda(this.intake, () -> this.intake.send()))
-                .on_release(new Zambda(this.intake, () -> this.intake.standby()))
-                .on_release(new Zambda(this.shooter, () -> this.shooter.standby()));
+        this.controller.lb().on_press(new Zambda(this.intake, this.intake.lift::reset));
+        this.controller.lt().into().on_down(new Zambda(this.intake, this.intake::take))
+                .on_release(new Zambda(this.intake, this.intake::standby));
+        this.controller.rt().into().on_down(new Zambda(this.shooter, this.shooter::shoot))
+                .on_down(new Zambda(this.intake, this.intake::send))
+                .on_release(new Zambda(this.intake, this.intake::standby))
+                .on_release(new Zambda(this.shooter, this.shooter::standby));
     }
 
     public RobotContainer init() {
