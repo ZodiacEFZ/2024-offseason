@@ -29,8 +29,7 @@ public final class Intake extends SubsystemBase implements ZmartDash {
     }
 
     public Intake standby() {
-        if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get())
-                || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
+        if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get()) || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
             this.lift.go("standby");
         }
         this.convey.shutdown();
@@ -39,8 +38,7 @@ public final class Intake extends SubsystemBase implements ZmartDash {
     }
 
     public Intake amp() {
-        if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get())
-                || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
+        if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get()) || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
             this.lift.go("standby");
         }
         this.debug("state", "amp");
@@ -56,20 +54,23 @@ public final class Intake extends SubsystemBase implements ZmartDash {
     }
 
     public Intake take() {
-        if (this.bottomLimitSwitch.get())
+        if (this.bottomLimitSwitch.get()) {
             this.lift.go("down");
-        else
+        } else {
             this.lift.shutdown();
+        }
         this.convey.raw(-0.4);
         this.debug("state", "taking");
         return this;
     }
 
     public Intake send() {
-        if (this.topLimitSwitch.get())
+        if (this.topLimitSwitch.get()) {
             this.lift.go("up");
-        if (!this.topLimitSwitch.get() || this.lift.get() < 100)
+        }
+        if (!this.topLimitSwitch.get() || this.lift.get() < 100) {
             this.convey.raw(0.3);
+        }
         this.debug("pos", this.lift.get());
         this.debug("state", "sending");
         return this;
