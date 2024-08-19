@@ -51,9 +51,8 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods. This must be called from the
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
-        var scheduler = CommandScheduler.getInstance();
-        scheduler.schedule(Chassis.inav.run);
-        scheduler.run();
+        Chassis.inav.run.schedule();
+        CommandScheduler.getInstance().run();
     }
 
     /**
@@ -74,12 +73,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        // m_autonomousCommand = RobotContainer.getAutoCommand();
-        // // schedule the autonomous command (example)
-        // if (m_autonomousCommand != null) {
-        // m_autonomousCommand.schedule();
-        // }
-        //todo
+        CommandScheduler.getInstance().cancelAll();
+        Auto.initInstance(m_bot.chassis, m_bot.intake, m_bot.shooter, Auto.POSITION.CENTER); //todo: check position
     }
 
     /**
@@ -87,9 +82,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        var scheduler = CommandScheduler.getInstance();
-        //        scheduler.schedule(m_bot.chassis.drive_forward()); //todo
-        scheduler.run();
+        Auto.getInstance().schedule();
+        CommandScheduler.getInstance().run();
     }
 
     @Override
@@ -98,13 +92,6 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        // if (m_autonomousCommand != null) {
-        // m_autonomousCommand.cancel();
-        // }
-        // if (RobotContainer.getTeleopShooterCommand() != null)
-        // RobotContainer.getTeleopShooterCommand().schedule();
-        // if (RobotContainer.getTeleopIntakeCommand() != null)
-        // RobotContainer.getTeleopIntakeCommand().schedule();
         CommandScheduler.getInstance().cancelAll();
     }
 
@@ -113,10 +100,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        final var scheduler = CommandScheduler.getInstance();
         m_bot.chassis.debug("rx", m_bot.driver.rx().inverted().threshold(.1).get());
-        scheduler.schedule(m_bot.drive);
-        scheduler.run();
+        m_bot.drive.schedule();
+        CommandScheduler.getInstance().run();
     }
 
     @Override
