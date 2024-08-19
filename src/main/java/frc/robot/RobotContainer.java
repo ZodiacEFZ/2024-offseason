@@ -9,6 +9,7 @@ import frc.libzodiac.Zambda;
 import frc.libzodiac.Zamera;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.ui.Xbox;
+import frc.robot.commands.Auto;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -29,6 +30,8 @@ public class RobotContainer {
     public final Zamera camera = new Zamera();
     public final Xbox driver = new Xbox(0);
     public final Xbox controller = new Xbox(1);
+
+    public final Auto auto = new Auto(this.chassis, this.intake, this.shooter, Auto.Position.Center);
 
     public final Command drive = chassis.drive(driver.ly().inverted().map(Axis.ATAN_FILTER).threshold(.1), driver.lx().inverted().map(Axis.ATAN_FILTER).threshold(.1), driver.rx().inverted().threshold(.1));
 

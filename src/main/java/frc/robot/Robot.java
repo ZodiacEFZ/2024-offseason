@@ -18,7 +18,7 @@ import frc.robot.subsystems.Chassis;
  * project.
  */
 public class Robot extends TimedRobot {
-    private static RobotContainer m_bot; //todo: rename to remove the warning
+    private static RobotContainer bot = null;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_bot = new RobotContainer().init();
+        bot = new RobotContainer().init();
     }
 
     /**
@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        Auto.initInstance(m_bot.chassis, m_bot.intake, m_bot.shooter, Auto.POSITION.CENTER); //todo: check position
+        bot.auto.init(); //todo: check position
     }
 
     /**
@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Auto.getInstance().schedule();
+        bot.auto.schedule();
         CommandScheduler.getInstance().run();
     }
 
@@ -100,8 +100,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        m_bot.chassis.debug("rx", m_bot.driver.rx().inverted().threshold(.1).get());
-        m_bot.drive.schedule();
+        bot.chassis.debug("rx", bot.driver.rx().inverted().threshold(.1).get());
+        bot.drive.schedule();
         CommandScheduler.getInstance().run();
     }
 
