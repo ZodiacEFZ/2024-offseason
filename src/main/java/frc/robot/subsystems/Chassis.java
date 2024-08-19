@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.libzodiac.InertialNavigation;
 import frc.libzodiac.Zwerve;
 import frc.libzodiac.hardware.Falcon;
 import frc.libzodiac.hardware.MagEncoder;
@@ -38,6 +39,8 @@ public class Chassis extends Zwerve {
     };
 
     private static final Pigeon gyro = new Pigeon(0);
+
+    public static final InertialNavigation inav = new InertialNavigation(gyro);
 
     /**
      * Creates a new Chassis.
