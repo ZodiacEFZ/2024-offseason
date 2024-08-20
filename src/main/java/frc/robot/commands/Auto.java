@@ -19,43 +19,26 @@ public class Auto extends ZCommand {
     private static Chassis chassis;
     private static Intake intake;
     private static Shooter shooter;
+    public static final AutoCommand Fallback = new AutoCommand() {
+        @Override
+        public AutoCommand init() {
+            commands.add(() -> shoot(3));
+            commands.add(() -> go(new Vec2D(3, 3), 0));
+            return this;
+        }
+    };
     public static final AutoCommand Left = new AutoCommand() {
         @Override
         public AutoCommand init() {
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(3, 3), 0));
             commands.add(() -> {
                 intake.take();
                 return go(new Vec2D(4, 4), 0);
             });
-            commands.add(() -> {
-                if (timer.get() < 0.5) {
-                    intake.take();
-                    return false;
-                }
-                intake.standby();
-                return true;
-            });
+            commands.add(() -> intake(0.5));
             commands.add(() -> go(new Vec2D(1, 1), 0));
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(3, 3), 0));
             return this;
         }
@@ -63,104 +46,38 @@ public class Auto extends ZCommand {
     public static final AutoCommand Center = new AutoCommand() {
         @Override
         public AutoCommand init() {
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(-1, -1), 0));
             commands.add(() -> {
                 intake.take();
                 return go(new Vec2D(-2, -2), 0);
             });
-            commands.add(() -> {
-                if (timer.get() < 0.5) {
-                    intake.take();
-                    return false;
-                }
-                intake.standby();
-                return true;
-            });
+            commands.add(() -> intake(0.5));
             commands.add(() -> go(new Vec2D(0, 0), 0));
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(1, 1), 0));
             commands.add(() -> {
                 intake.take();
                 return go(new Vec2D(2, 2), 0);
             });
-            commands.add(() -> {
-                if (timer.get() < 0.5) {
-                    intake.take();
-                    return false;
-                }
-                intake.standby();
-                return true;
-            });
+            commands.add(() -> intake(0.5));
             commands.add(() -> go(new Vec2D(0, 0), 0));
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             return this;
         }
     };
     public static final AutoCommand Right = new AutoCommand() {
         @Override
         public AutoCommand init() {
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(3, 3), 0));
             commands.add(() -> {
                 intake.take();
                 return go(new Vec2D(4, 4), 0);
             });
-            commands.add(() -> {
-                if (timer.get() < 0.5) {
-                    intake.take();
-                    return false;
-                }
-                intake.standby();
-                return true;
-            });
+            commands.add(() -> intake(0.5));
             commands.add(() -> go(new Vec2D(1, 1), 0));
-            commands.add(() -> {
-                if (timer.get() < 1.5) {
-                    intake.send();
-                    shooter.shoot();
-                    return false;
-                }
-                intake.standby();
-                shooter.standby();
-                return true;
-            });
+            commands.add(() -> shoot(1.5));
             commands.add(() -> go(new Vec2D(3, 3), 0));
             return this;
         }
@@ -179,6 +96,26 @@ public class Auto extends ZCommand {
         final var deltaYaw = yaw - Chassis.inav.getYaw();
         chassis.go(deltaPos.mul(CHASSIS_POSITION_KP), deltaYaw * CHASSIS_ROTATION_KP);
         return deltaPos.r() < CHASSIS_POSITION_THRESHOLD && Math.abs(deltaYaw) < CHASSIS_ROTATION_THRESHOLD;
+    }
+
+    private static boolean shoot(double time) {
+        if (timer.get() < time) {
+            intake.send();
+            shooter.shoot();
+            return false;
+        }
+        intake.standby();
+        shooter.standby();
+        return true;
+    }
+
+    private static boolean intake(double time) {
+        if (timer.get() < time) {
+            intake.take();
+            return false;
+        }
+        intake.standby();
+        return true;
     }
 
     public Auto init() {
