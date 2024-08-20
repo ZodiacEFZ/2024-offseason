@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libzodiac.ZCommand;
+import frc.libzodiac.Zambda;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.hardware.Falcon;
+import frc.libzodiac.ui.Axis;
 
 public final class Shooter extends SubsystemBase implements ZmartDash {
     private final Falcon rd = new Falcon(21);
@@ -27,11 +30,26 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public Shooter shoot() {
-        this.ld.go(5000);
-        this.lu.go(5000);
-        this.rd.go(5000);
-        this.ru.go(5000);
+        return this.shoot(5000);
+    }
+
+    public Shooter shoot(double speed) {
+        this.ld.go(speed);
+        this.lu.go(speed);
+        this.rd.go(speed);
+        this.ru.go(speed);
         return this;
+    }
+
+    public ZCommand ctrl(Axis output) {
+        final var speed = output.map(x -> x > 0 ? x : 0).threshold(.1);
+        return new Zambda(this, () -> {
+            final var v = speed.get();
+            if (v == 0)
+                this.standby();
+            else
+                this.shoot(v * 5000);
+        });
     }
 
     @Override

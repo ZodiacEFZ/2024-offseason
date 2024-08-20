@@ -101,6 +101,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         bot.drive.schedule();
+        bot.shoot.schedule();
         CommandScheduler.getInstance().run();
     }
 
