@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        bot.auto.init(); //todo: check position
+        bot.auto.init();
     }
 
     /**
