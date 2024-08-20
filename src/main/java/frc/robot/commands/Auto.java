@@ -60,6 +60,111 @@ public class Auto extends ZCommand {
             return this;
         }
     };
+    public static final AutoCommand Center = new AutoCommand() {
+        @Override
+        public AutoCommand init() {
+            commands.add(() -> {
+                if (timer.get() < 1.5) {
+                    intake.send();
+                    shooter.shoot();
+                    return false;
+                }
+                intake.standby();
+                shooter.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(-1, -1), 0));
+            commands.add(() -> {
+                intake.take();
+                return go(new Vec2D(-2, -2), 0);
+            });
+            commands.add(() -> {
+                if (timer.get() < 0.5) {
+                    intake.take();
+                    return false;
+                }
+                intake.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(0, 0), 0));
+            commands.add(() -> {
+                if (timer.get() < 1.5) {
+                    intake.send();
+                    shooter.shoot();
+                    return false;
+                }
+                intake.standby();
+                shooter.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(1, 1), 0));
+            commands.add(() -> {
+                intake.take();
+                return go(new Vec2D(2, 2), 0);
+            });
+            commands.add(() -> {
+                if (timer.get() < 0.5) {
+                    intake.take();
+                    return false;
+                }
+                intake.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(0, 0), 0));
+            commands.add(() -> {
+                if (timer.get() < 1.5) {
+                    intake.send();
+                    shooter.shoot();
+                    return false;
+                }
+                intake.standby();
+                shooter.standby();
+                return true;
+            });
+            return this;
+        }
+    };
+    public static final AutoCommand Right = new AutoCommand() {
+        @Override
+        public AutoCommand init() {
+            commands.add(() -> {
+                if (timer.get() < 1.5) {
+                    intake.send();
+                    shooter.shoot();
+                    return false;
+                }
+                intake.standby();
+                shooter.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.add(() -> {
+                intake.take();
+                return go(new Vec2D(4, 4), 0);
+            });
+            commands.add(() -> {
+                if (timer.get() < 0.5) {
+                    intake.take();
+                    return false;
+                }
+                intake.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(1, 1), 0));
+            commands.add(() -> {
+                if (timer.get() < 1.5) {
+                    intake.send();
+                    shooter.shoot();
+                    return false;
+                }
+                intake.standby();
+                shooter.standby();
+                return true;
+            });
+            commands.add(() -> go(new Vec2D(3, 3), 0));
+            return this;
+        }
+    };
     private static AutoCommand command;
 
     public Auto(Chassis chassis, Intake intake, Shooter shooter, AutoCommand command) {
