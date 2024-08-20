@@ -33,7 +33,6 @@ public final class Intake extends SubsystemBase implements ZmartDash {
             this.lift.go("standby");
         }
         this.convey.shutdown();
-        this.debug("state", "standby");
         return this;
     }
 
@@ -41,7 +40,6 @@ public final class Intake extends SubsystemBase implements ZmartDash {
         if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get()) || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
             this.lift.go("standby");
         }
-        this.debug("state", "amp");
         if (Util.approx(this.lift.get(), this.lift.profile.get("standby"), 100)) {
             this.convey.raw(0.3);
         }
@@ -60,7 +58,6 @@ public final class Intake extends SubsystemBase implements ZmartDash {
             this.lift.shutdown();
         }
         this.convey.raw(-0.4);
-        this.debug("state", "taking");
         return this;
     }
 
@@ -72,7 +69,6 @@ public final class Intake extends SubsystemBase implements ZmartDash {
             this.convey.raw(0.3);
         }
         this.debug("pos", this.lift.get());
-        this.debug("state", "sending");
         return this;
     }
 

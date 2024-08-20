@@ -33,7 +33,7 @@ public class RobotContainer {
 
     public final Auto auto = new Auto(this.chassis, this.intake, this.shooter, Auto.Position.Center);
 
-    public final Command drive = chassis.drive(driver.ly().inverted().map(Axis.ATAN_FILTER).threshold(.1), driver.lx().inverted().map(Axis.ATAN_FILTER).threshold(.1), driver.rx().inverted().threshold(.1));
+    public final Command drive = chassis.drive(driver.ly().inverted().map(Axis.ATAN_FILTER).threshold(.02), driver.lx().inverted().map(Axis.ATAN_FILTER).threshold(.02), driver.rx().inverted().threshold(.02));
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.

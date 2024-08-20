@@ -19,7 +19,6 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public Shooter standby() {
-        this.debug("state", "standby");
         this.rd.shutdown();
         this.ru.shutdown();
         this.ld.shutdown();
@@ -28,7 +27,6 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
     }
 
     public Shooter shoot() {
-        this.debug("state", "shooting");
         this.ld.go(5000);
         this.lu.go(5000);
         this.rd.go(5000);
