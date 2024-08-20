@@ -45,10 +45,11 @@ public final class Shooter extends SubsystemBase implements ZmartDash {
         final var speed = output.map(x -> x > 0 ? x : 0).threshold(.1);
         return new Zambda(this, () -> {
             final var v = speed.get();
-            if (v == 0)
+            if (v == 0) {
                 this.standby();
-            else
+            } else {
                 this.shoot(v * 5000);
+            }
         });
     }
 
