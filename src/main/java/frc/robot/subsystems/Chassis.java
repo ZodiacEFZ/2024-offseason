@@ -27,7 +27,7 @@ public class Chassis extends Zwerve {
      */
     public Chassis() {
         super(mods, gyro.yaw(), new Vec2D(114, 114));
-        super.output = 300;
+        super.output = 600;
         final var v = new PIDProfile(0.1, 5, 0);
         final var a = new PIDProfile(0.3, 0, 0);
         // Mod I.
