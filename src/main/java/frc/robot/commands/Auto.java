@@ -16,52 +16,56 @@ public class Auto extends ZCommand {
     private static final double CHASSIS_POSITION_THRESHOLD = 1;
     private static final double CHASSIS_ROTATION_THRESHOLD = 0.05;
     private static final Timer timer = new Timer();
+    private static final double SHOOTER_PRESTART_TIME = 1;
     private static Chassis chassis;
     private static Intake intake;
     private static Shooter shooter;
     public static final AutoCommand Fallback = new AutoCommand() {
         @Override
         public AutoCommand init() {
-            commands.add(() -> shoot(3));
-            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.clear();
+            commands.add(() -> shoot(5));
+            commands.add(() -> go(new Vec2D(0.3, 0), 0, 3));
             return this;
         }
     };
     public static final AutoCommand Left = new AutoCommand() {
         @Override
         public AutoCommand init() {
+            commands.clear();
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.add(() -> go_pos(new Vec2D(3, 3), 0));
             commands.add(() -> {
                 intake.take();
-                return go(new Vec2D(4, 4), 0);
+                return go_pos(new Vec2D(4, 4), 0);
             });
             commands.add(() -> intake(0.5));
-            commands.add(() -> go(new Vec2D(1, 1), 0));
+            commands.add(() -> go_pos(new Vec2D(1, 1), 0));
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.add(() -> go_pos(new Vec2D(3, 3), 0));
             return this;
         }
     };
     public static final AutoCommand Center = new AutoCommand() {
         @Override
         public AutoCommand init() {
+            commands.clear();
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(-1, -1), 0));
+            commands.add(() -> go_pos(new Vec2D(-1, -1), 0));
             commands.add(() -> {
                 intake.take();
-                return go(new Vec2D(-2, -2), 0);
+                return go_pos(new Vec2D(-2, -2), 0);
             });
             commands.add(() -> intake(0.5));
-            commands.add(() -> go(new Vec2D(0, 0), 0));
+            commands.add(() -> go_pos(new Vec2D(0, 0), 0));
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(1, 1), 0));
+            commands.add(() -> go_pos(new Vec2D(1, 1), 0));
             commands.add(() -> {
                 intake.take();
-                return go(new Vec2D(2, 2), 0);
+                return go_pos(new Vec2D(2, 2), 0);
             });
             commands.add(() -> intake(0.5));
-            commands.add(() -> go(new Vec2D(0, 0), 0));
+            commands.add(() -> go_pos(new Vec2D(0, 0), 0));
             commands.add(() -> shoot(1.5));
             return this;
         }
@@ -69,16 +73,17 @@ public class Auto extends ZCommand {
     public static final AutoCommand Right = new AutoCommand() {
         @Override
         public AutoCommand init() {
+            commands.clear();
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.add(() -> go_pos(new Vec2D(3, 3), 0));
             commands.add(() -> {
                 intake.take();
-                return go(new Vec2D(4, 4), 0);
+                return go_pos(new Vec2D(4, 4), 0);
             });
             commands.add(() -> intake(0.5));
-            commands.add(() -> go(new Vec2D(1, 1), 0));
+            commands.add(() -> go_pos(new Vec2D(1, 1), 0));
             commands.add(() -> shoot(1.5));
-            commands.add(() -> go(new Vec2D(3, 3), 0));
+            commands.add(() -> go_pos(new Vec2D(3, 3), 0));
             return this;
         }
     };
@@ -91,20 +96,35 @@ public class Auto extends ZCommand {
         Auto.command = command;
     }
 
-    private static boolean go(Vec2D pos, double yaw) {
+    private static boolean go_pos(Vec2D pos, double yaw) {
         final var deltaPos = pos.sub(Chassis.inav.getPosition());
         final var deltaYaw = yaw - Chassis.inav.getYaw();
         chassis.go(deltaPos.mul(CHASSIS_POSITION_KP), deltaYaw * CHASSIS_ROTATION_KP);
         return deltaPos.r() < CHASSIS_POSITION_THRESHOLD && Math.abs(deltaYaw) < CHASSIS_ROTATION_THRESHOLD;
     }
 
+    private static boolean go(Vec2D vel, double rot, double time) {
+        if (timer.get() < time) {
+            chassis.go(vel, rot);
+            return false;
+        }
+        chassis.go(new Vec2D(0, 0), 0);
+        chassis.go(new Vec2D(0, 0), 0);
+        chassis.go(new Vec2D(0, 0), 0);
+        chassis.go(new Vec2D(0, 0), 0);
+        chassis.go(new Vec2D(0, 0), 0);
+        return true;
+    }
+
     private static boolean shoot(double time) {
         if (timer.get() < time) {
-            intake.send();
+            if (timer.get() > SHOOTER_PRESTART_TIME) {
+                intake.send();
+            }
             shooter.shoot();
             return false;
         }
-        intake.standby();
+        intake.up();
         shooter.standby();
         return true;
     }

@@ -47,14 +47,17 @@ public class Chassis extends Zwerve {
     @Override
     protected Zwerve opt_init() {
         gyro.init();
-        encoder[0].set_zero(3607); //todo
-        encoder[1].set_zero(480);
-        encoder[2].set_zero(192);
-        encoder[3].set_zero(1853);
+        inav.init();
+        encoder[0].set_zero(3581); //todo
+        encoder[1].set_zero(408);
+        encoder[2].set_zero(149);
+        encoder[3].set_zero(1921);
+        this.mod_reset();
         return this;
     }
 
     public void reset_headless() {
         super.headless_zero = gyro.get("yaw");
+        this.headless = false;
     }
 }
