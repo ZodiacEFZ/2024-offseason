@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.libzodiac.Zambda;
 import frc.libzodiac.Zamera;
-import frc.libzodiac.hardware.Limelight;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.ui.Xbox;
 import frc.robot.commands.Auto;
@@ -35,10 +34,7 @@ public class RobotContainer {
 
     public final Command drive = this.chassis.drive(driver.ly().inverted().threshold(.02).map(Axis.ATAN_FILTER),
                                                     driver.lx().inverted().threshold(.02).map(Axis.ATAN_FILTER),
-                                                    driver.rx().inverted().threshold(.02),
-                                                    driver.rb().status(),
-                                                    Limelight.getTargetForwardSpeed(),
-                                                    Limelight.getTargetRotateSpeed());
+                                                    driver.rx().inverted().threshold(.02));
 
     public final Command shoot = this.shooter.ctrl(controller.ry());
 
@@ -51,15 +47,13 @@ public class RobotContainer {
         this.driver.x().on_press(new Zambda(this.chassis, this.chassis::mod_reset));
 
         this.controller.a().on_down(new Zambda(this.intake, this.intake::amp))
-                       .on_release(new Zambda(this.intake, () -> this.intake.amp(false)));
+                       .on_release(new Zambda(this.intake, this.intake::standby));
         this.controller.b().on_down(new Zambda(this.intake, this.intake::up));
         this.controller.lb().on_press(new Zambda(this.intake, this.intake.lift::reset));
         this.controller.lt().into().on_down(new Zambda(this.intake, this.intake::take))
                        .on_release(new Zambda(this.intake, this.intake::standby));
         this.controller.rt().into()
-//                       .on_down(new Zambda(this.shooter, this.shooter::shoot))
                        .on_down(new Zambda(this.intake, this.intake::send))
-//                       .on_release(new Zambda(this.shooter, this.shooter::standby))
                        .on_release(new Zambda(this.intake, this.intake::standby));
     }
 

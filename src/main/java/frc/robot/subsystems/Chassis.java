@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.libzodiac.InertialNavigation;
 import frc.libzodiac.Zwerve;
 import frc.libzodiac.hardware.Falcon;
 import frc.libzodiac.hardware.MagEncoder;
@@ -20,15 +19,13 @@ public class Chassis extends Zwerve {
 
     private static final Pigeon gyro = new Pigeon(0);
 
-    public static final InertialNavigation inav = new InertialNavigation(gyro);
-
     /**
      * Creates a new Chassis.
      */
     public Chassis() {
         super(mods, gyro.yaw(), new Vec2D(114, 114));
         super.output = 600;
-        final var v = new PIDProfile(0.1, 5, 0);
+        final var v = new PIDProfile(0.2, 5, 0);
         final var a = new PIDProfile(0.3, 0, 0);
         // Mod I.
         mods[0].speed_motor.set_pid(v);
@@ -47,7 +44,6 @@ public class Chassis extends Zwerve {
     @Override
     protected Zwerve opt_init() {
         gyro.init();
-        inav.init();
         encoder[0].set_zero(3581); //todo
         encoder[1].set_zero(408);
         encoder[2].set_zero(149);

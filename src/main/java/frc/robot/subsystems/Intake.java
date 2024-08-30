@@ -15,10 +15,11 @@ public final class Intake extends SubsystemBase implements ZmartDash {
     private final DigitalInput bottomLimitSwitch = new DigitalInput(0);
 
     public Intake() {
-        this.lift.set_pid(0.5, 5e-5, 50);
-        this.lift.profile.put("down", 3400.0);
+        this.lift.set_pid(0.5, 1e-4, 50);
+        this.lift.profile.put("down", 3500.0);
         this.lift.profile.put("up", 0.0);
-        this.lift.profile.put("standby", 1000.0); //todo
+        this.lift.profile.put("standby", 0.0);
+        this.lift.profile.put("amp", 1200.0);
         this.convey.set_pid(0, 0, 0);
     }
 
@@ -47,16 +48,11 @@ public final class Intake extends SubsystemBase implements ZmartDash {
 
     public Intake amp() {
         if ((this.lift.get() < this.lift.profile.get("standby") && this.bottomLimitSwitch.get()) || (this.lift.get() > this.lift.profile.get("standby") && this.topLimitSwitch.get())) {
-            this.lift.go("standby");
+            this.lift.go("amp");
         }
-        if (Util.approx(this.lift.get(), this.lift.profile.get("standby"), 100)) {
-            this.convey.raw(0.3);
+        if (Util.approx(this.lift.get(), this.lift.profile.get("amp"), 150)) {
+            this.convey.raw(0.4);
         }
-        return this;
-    }
-
-    public Intake amp(boolean __) {
-        this.convey.shutdown();
         return this;
     }
 

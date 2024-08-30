@@ -25,7 +25,7 @@ public class Auto extends ZCommand {
         public AutoCommand init() {
             commands.clear();
             commands.add(() -> shoot(5));
-            commands.add(() -> go(new Vec2D(0.3, 0), 0, 3));
+            commands.add(() -> go(new Vec2D(-0.3, 0), 0, 3));
             return this;
         }
     };
@@ -97,10 +97,12 @@ public class Auto extends ZCommand {
     }
 
     private static boolean go_pos(Vec2D pos, double yaw) {
-        final var deltaPos = pos.sub(Chassis.inav.getPosition());
-        final var deltaYaw = yaw - Chassis.inav.getYaw();
-        chassis.go(deltaPos.mul(CHASSIS_POSITION_KP), deltaYaw * CHASSIS_ROTATION_KP);
-        return deltaPos.r() < CHASSIS_POSITION_THRESHOLD && Math.abs(deltaYaw) < CHASSIS_ROTATION_THRESHOLD;
+//        final var deltaPos = pos.sub(Chassis.inav.getPosition());
+//        final var deltaYaw = yaw - Chassis.inav.getYaw();
+//        chassis.go(deltaPos.mul(CHASSIS_POSITION_KP), deltaYaw * CHASSIS_ROTATION_KP);
+//        return deltaPos.r() < CHASSIS_POSITION_THRESHOLD && Math.abs(deltaYaw) < CHASSIS_ROTATION_THRESHOLD;
+        //todo
+        return true;
     }
 
     private static boolean go(Vec2D vel, double rot, double time) {
